@@ -29,15 +29,9 @@ function RegisterPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setSubmitted(true);
-        if( user.password === user.passwordCheck){
-            if (user.firstName && user.lastName && user.username && user.password && user.passwordCheck) {
-                dispatch(userActions.register(user));
-            }
-        }else{
-            user.passwordCheck = '';
-            console.log('password diferente');
+        if (user.password === user.passwordCheck && user.firstName && user.lastName && user.username && user.password && user.passwordCheck) {
+            dispatch(userActions.register(user));
         }
-
     }
 
     return (
