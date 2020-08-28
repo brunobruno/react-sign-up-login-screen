@@ -1,11 +1,10 @@
 import config from 'config';
-import { authHeader } from '../_helpers';
+import { authHeader } from '../_helpers/auth-header';
 
 export const userService = {
     login,
     logout,
     register,
-    getAll,
     getById,
     update
 };
@@ -22,7 +21,6 @@ function login(username, password) {
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('user', JSON.stringify(user));
-
             return user;
         });
 }
@@ -30,15 +28,6 @@ function login(username, password) {
 function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('user');
-}
-
-function getAll() {
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
 }
 
 function getById(id) {

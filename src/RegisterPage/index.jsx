@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,7 +9,8 @@ function RegisterPage() {
         firstName: '',
         lastName: '',
         username: '',
-        password: ''
+        password: '',
+        passwordCheck: ''
     });
     const [submitted, setSubmitted] = useState(false);
     const registering = useSelector(state => state.registration.registering);
@@ -20,22 +21,27 @@ function RegisterPage() {
         dispatch(userActions.logout());
     }, []);
 
-    function handleChange(e) {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setUser(user => ({ ...user, [name]: value }));
     }
 
-    function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
-
         setSubmitted(true);
-        if (user.firstName && user.lastName && user.username && user.password) {
-            dispatch(userActions.register(user));
+        if( user.password === user.passwordCheck){
+            if (user.firstName && user.lastName && user.username && user.password && user.passwordCheck) {
+                dispatch(userActions.register(user));
+            }
+        }else{
+            user.passwordCheck = '';
+            console.log('password diferente');
         }
+
     }
 
     return (
-        <Fragment>
+        <>
             <h2>Register</h2>
             <form name="form" onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -97,6 +103,22 @@ function RegisterPage() {
                     }
                 </div>
                 <div className="form-group">
+                    <label>Confirm password</label>
+                    <input
+                        type="password"
+                        name="passwordCheck"
+                        value={user.passwordCheck}
+                        placeholder="The same from before"
+                        onChange={handleChange}
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="The same from before"
+                        className={'form-control' + (submitted && !user.passwordCheck || (user.passwordCheck && user.password !== user.passwordCheck) ? ' is-invalid' : '')}
+                    />
+                    {submitted && !user.passwordCheck &&
+                        <div className="invalid-feedback">Password Check is required</div>
+                    }
+                </div>
+                <div className="form-group">
                     <button className="btn btn-primary">
                         {registering && <span className="spinner-border spinner-border-sm mr-1"></span>}
                         Register
@@ -104,7 +126,7 @@ function RegisterPage() {
                     <Link to="/login" className="btn btn-link text-danger">Cancel</Link>
                 </div>
             </form>
-        </Fragment>
+        </>
     );
 }
 

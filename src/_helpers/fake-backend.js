@@ -48,10 +48,10 @@ export function configureFakeBackend() {
                 const user = body;
     
                 if (users.find(x => x.username === user.username)) {
-                    return error(`Username  ${user.username} is already taken`);
+                    return error(`Email  ${user.username} is already taken`);
                 }
     
-                // assign user id and a few other properties then save
+                // assign user id and a other properties then save
                 user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
                 users.push(user);
                 localStorage.setItem('users', JSON.stringify(users));
@@ -63,14 +63,6 @@ export function configureFakeBackend() {
                 if (!isLoggedIn()) return unauthorized();
 
                 return ok(users);
-            }
-    
-            function deleteUser() {
-                if (!isLoggedIn()) return unauthorized();
-    
-                users = users.filter(x => x.id !== idFromUrl());
-                localStorage.setItem('users', JSON.stringify(users));
-                return ok();
             }
 
             // helper functions
@@ -91,10 +83,6 @@ export function configureFakeBackend() {
                 return headers['Authorization'] === 'Bearer fake-jwt-token';
             }
     
-            function idFromUrl() {
-                const urlParts = url.split('/');
-                return parseInt(urlParts[urlParts.length - 1]);
-            }
         });
     }
 }

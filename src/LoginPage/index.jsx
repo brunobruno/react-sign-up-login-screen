@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,12 +19,12 @@ function LoginPage() {
         dispatch(userActions.logout()); 
     }, []);
 
-    function handleChange(e) {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setInputs(inputs => ({ ...inputs, [name]: value }));
     }
 
-    function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         setSubmitted(true);
@@ -34,7 +34,7 @@ function LoginPage() {
     }
 
     return (
-        <Fragment>
+        <>
             <h2>Login</h2>
             <form name="form" onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -72,7 +72,7 @@ function LoginPage() {
                     <Link to="/register" className="btn btn-link">Register</Link>
                 </div>
             </form>
-        </Fragment>
+        </>
     );
 }
 
